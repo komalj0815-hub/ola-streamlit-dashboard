@@ -34,12 +34,12 @@ col1, col2 = st.columns(2)
 with col1:
     st.subheader("Ride Volume Over Time")
 
-rides = df.groupby("Date").size()
+    rides = df.groupby("Date").size()
 
-fig, ax = plt.subplots(figsize=(4,4))
+    fig, ax = plt.subplots(figsize=(4,4))
 
-rides.plot(ax=ax)
-st.pyplot(fig)
+    rides.plot(ax=ax)
+    st.pyplot(fig)
 
 # Booking Status Pie Chart
 with col2:
