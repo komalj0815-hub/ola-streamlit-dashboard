@@ -40,16 +40,22 @@ with col1:
 
 # Booking Status
 with col2:
-    st.subheader("Booking Status Breakdown")
-    status = df["Booking_Status"].value_counts()
+   st.subheader("Booking Status Breakdown")
 
-    fig, ax = plt.subplots()
-    status.plot(kind="bar", ax=ax)
-    st.pyplot(fig)
+status = df["Booking_Status"].value_counts()
 
-st.divider()
+fig, ax = plt.subplots()
 
-col3, col4 = st.columns(2)
+ax.pie(
+    status,
+    labels=status.index,
+    autopct='%1.1f%%',
+    startangle=90
+)
+
+ax.axis("equal")
+
+st.pyplot(fig)
 
 # Revenue by Payment Method
 with col3:
@@ -63,15 +69,22 @@ with col3:
 
 # Vehicle Type Distance
 with col4:
-    st.subheader("Top Vehicle Types by Ride Distance")
+   st.subheader("Top Vehicle Types by Ride Distance")
 
-    vehicle = df.groupby("Vehicle_Type")["Ride_Distance"].sum().sort_values(ascending=False).head(5)
+vehicle_distance = (
+    df.groupby("Vehicle_Type")["Ride_Distance"]
+    .sum()
+    .sort_values()
+)
 
-    fig, ax = plt.subplots()
-    vehicle.plot(kind="bar", ax=ax)
-    st.pyplot(fig)
+fig, ax = plt.subplots()
 
-st.divider()
+vehicle_distance.plot(kind="barh", ax=ax)
+
+ax.set_xlabel("Total Ride Distance")
+ax.set_ylabel("Vehicle Type")
+
+st.pyplot(fig)
 
 # Customer Rating 
 st.subheader("Customer Ratings Heatmap")
