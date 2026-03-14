@@ -39,10 +39,6 @@ rides = df.groupby("Date").size()
 fig, ax = plt.subplots(figsize=(6,3))
 
 rides.plot(ax=ax)
-
-ax.set_xlabel("Date")
-ax.set_ylabel("Number of Rides")
-
 st.pyplot(fig)
 
 # Booking Status Pie Chart
