@@ -34,11 +34,16 @@ col1, col2 = st.columns(2)
 with col1:
     st.subheader("Ride Volume Over Time")
 
-    rides = df.groupby("Date").size()
+rides = df.groupby("Date").size()
 
-    fig, ax = plt.subplots(figsize=(6,3))
-    rides.plot(ax=ax)
-    st.pyplot(fig)
+fig, ax = plt.subplots(figsize=(6,3))
+
+rides.plot(ax=ax)
+
+ax.set_xlabel("Date")
+ax.set_ylabel("Number of Rides")
+
+st.pyplot(fig)
 
 # Booking Status Pie Chart
 with col2:
@@ -104,7 +109,7 @@ col5, col6 = st.columns(2)
 
 # Customer Rating Heatmap
 with col5:
-    st.subheader("Customer Rating Heatmap")
+    st.subheader("Customer Rating ")
 
     customer_heat = df.pivot_table(
         values="Customer_Rating",
@@ -121,7 +126,7 @@ with col5:
 
 # Driver Rating Heatmap
 with col6:
-    st.subheader("Driver Rating Heatmap")
+    st.subheader("Driver Rating ")
 
     driver_heat = df.pivot_table(
         values="Driver_Ratings",
