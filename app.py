@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 st.set_page_config(page_title="OLA Dashboard", layout="wide")
 
@@ -72,12 +73,35 @@ with col4:
 
 st.divider()
 
-# Ratings Comparison
-st.subheader("Customer vs Driver Ratings")
+# Customer Rating 
+st.subheader("Customer Ratings Heatmap")
 
 fig, ax = plt.subplots()
-ax.scatter(df["Customer_Rating"], df["Driver_Ratings"])
-ax.set_xlabel("Customer Rating")
-ax.set_ylabel("Driver Rating")
+
+customer_heat = df.pivot_table(
+    values="Customer_Rating",
+    index="Vehicle_Type",
+    columns="Payment_Method",
+    aggfunc="mean"
+)
+
+sns.heatmap(customer_heat, annot=True, cmap="YlOrRd", ax=ax)
+
+st.pyplot(fig)
+
+#Driver Rating 
+
+st.subheader("Driver Ratings Heatmap")
+
+fig, ax = plt.subplots()
+
+driver_heat = df.pivot_table(
+    values="Driver_Ratings",
+    index="Vehicle_Type",
+    columns="Payment_Method",
+    aggfunc="mean"
+)
+
+sns.heatmap(driver_heat, annot=True, cmap="Blues", ax=ax)
 
 st.pyplot(fig)
