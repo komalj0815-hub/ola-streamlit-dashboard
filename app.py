@@ -2,73 +2,82 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-st.title("OLA Ride Data Dashboard")
+st.set_page_config(page_title="OLA Dashboard", layout="wide")
 
-# Load dataset
+st.title("🚖 OLA Ride Data Analysis Dashboard")
+
+# Load data
 df = pd.read_excel("OLA_Cleaned_Data.xlsx")
 
-st.subheader("Dataset Preview")
-st.dataframe(df.head())
+# ---- KPI SECTION ----
+total_rides = df.shape[0]
+total_revenue = df["Booking_Value"].sum()
+avg_driver_rating = df["Driver_Ratings"].mean()
+avg_distance = df["Ride_Distance"].mean()
 
-# 1 Ride Volume Over Time
-st.subheader("Ride Volume Over Time")
-rides = df.groupby("Date").size()
+col1, col2, col3, col4 = st.columns(4)
 
-fig1, ax1 = plt.subplots()
-rides.plot(ax=ax1)
-st.pyplot(fig1)
+col1.metric("Total Rides", total_rides)
+col2.metric("Total Revenue", f"₹ {total_revenue:,.0f}")
+col3.metric("Avg Driver Rating", round(avg_driver_rating,2))
+col4.metric("Avg Ride Distance", round(avg_distance,2))
 
-# 2 Booking Status Breakdown
-st.subheader("Booking Status Breakdown")
-status = df["Booking_Status"].value_counts()
+st.divider()
 
-fig2, ax2 = plt.subplots()
-status.plot(kind="bar", ax=ax2)
-st.pyplot(fig2)
+# ---- CHARTS ----
 
-# 3 Top 5 Vehicle Types by Ride Distance
-st.subheader("Top Vehicle Types by Ride Distance")
-vehicle = df.groupby("Vehicle_Type")["Ride_Distance"].sum().sort_values(ascending=False).head(5)
+col1, col2 = st.columns(2)
 
-fig3, ax3 = plt.subplots()
-vehicle.plot(kind="bar", ax=ax3)
-st.pyplot(fig3)
+# Ride Volume
+with col1:
+    st.subheader("Ride Volume Over Time")
+    rides = df.groupby("Date").size()
 
-# 4 Average Customer Rating by Vehicle Type
-st.subheader("Average Customer Rating by Vehicle Type")
-rating = df.groupby("Vehicle_Type")["Customer_Rating"].mean()
+    fig, ax = plt.subplots()
+    rides.plot(ax=ax)
+    st.pyplot(fig)
 
-fig4, ax4 = plt.subplots()
-rating.plot(kind="bar", ax=ax4)
-st.pyplot(fig4)
+# Booking Status
+with col2:
+    st.subheader("Booking Status Breakdown")
+    status = df["Booking_Status"].value_counts()
 
-# 5 Revenue by Payment Method
-st.subheader("Revenue by Payment Method")
-revenue = df.groupby("Payment_Method")["Booking_Value"].sum()
+    fig, ax = plt.subplots()
+    status.plot(kind="bar", ax=ax)
+    st.pyplot(fig)
 
-fig5, ax5 = plt.subplots()
-revenue.plot(kind="bar", ax=ax5)
-st.pyplot(fig5)
+st.divider()
 
-# 6 Top 5 Customers by Booking Value
-st.subheader("Top 5 Customers")
-top_customers = df.groupby("Customer_ID")["Booking_Value"].sum().sort_values(ascending=False).head(5)
+col3, col4 = st.columns(2)
 
-st.dataframe(top_customers)
+# Revenue by Payment Method
+with col3:
+    st.subheader("Revenue by Payment Method")
 
-# 7 Driver Ratings Distribution
-st.subheader("Driver Ratings Distribution")
+    revenue = df.groupby("Payment_Method")["Booking_Value"].sum()
 
-fig6, ax6 = plt.subplots()
-df["Driver_Ratings"].hist(ax=ax6)
-st.pyplot(fig6)
+    fig, ax = plt.subplots()
+    revenue.plot(kind="bar", ax=ax)
+    st.pyplot(fig)
 
-# 8 Customer vs Driver Ratings
+# Vehicle Type Distance
+with col4:
+    st.subheader("Top Vehicle Types by Ride Distance")
+
+    vehicle = df.groupby("Vehicle_Type")["Ride_Distance"].sum().sort_values(ascending=False).head(5)
+
+    fig, ax = plt.subplots()
+    vehicle.plot(kind="bar", ax=ax)
+    st.pyplot(fig)
+
+st.divider()
+
+# Ratings Comparison
 st.subheader("Customer vs Driver Ratings")
 
-fig7, ax7 = plt.subplots()
-ax7.scatter(df["Customer_Rating"], df["Driver_Ratings"])
-ax7.set_xlabel("Customer Rating")
-ax7.set_ylabel("Driver Rating")
+fig, ax = plt.subplots()
+ax.scatter(df["Customer_Rating"], df["Driver_Ratings"])
+ax.set_xlabel("Customer Rating")
+ax.set_ylabel("Driver Rating")
 
-st.pyplot(fig7)
+st.pyplot(fig)
