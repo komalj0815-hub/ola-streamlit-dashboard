@@ -36,7 +36,7 @@ with col1:
 
 rides = df.groupby("Date").size()
 
-fig, ax = plt.subplots(figsize=(6,3))
+fig, ax = plt.subplots(figsize=(4,4))
 
 rides.plot(ax=ax)
 st.pyplot(fig)
