@@ -40,7 +40,7 @@ with col1:
 
 # Booking Status
 with col2:
-   st.subheader("Booking Status Breakdown")
+st.subheader("Booking Status Breakdown")
 
 status = df["Booking_Status"].value_counts()
 
