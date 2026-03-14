@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 st.title("OLA Ride Data Dashboard")
 
 # Load dataset
-df = pd.read_excel("C:\Users\HP\Desktop\KOMAL JADHAV\Projects\Labmentix\OLA\OLA_Cleaned_Data")
+df = pd.read_excel("OLA_Cleaned_Data.xlsx")
 
 st.subheader("Dataset Preview")
 st.dataframe(df.head())
